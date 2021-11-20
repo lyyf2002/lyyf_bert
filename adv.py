@@ -12,7 +12,7 @@ class FGM:
     
     def attack(self):
         for name, param in self.model.named_parameters():
-            if param.requires_grad and name.startswith('bert.embeddings'):
+            if param.requires_grad and name.startswith('emb'):
                 self.backup[name] = param.data.clone()
                 norm = torch.norm(param.grad)
                 if norm != 0:
@@ -21,7 +21,7 @@ class FGM:
     
     def restore(self):
         for name, param in self.model.named_parameters():
-            if param.requires_grad and name.startswith('embeddings'):
+            if param.requires_grad and name.startswith('emb'):
                 assert name in self.backup
                 param.data = self.backup[name]
         self.backup.clear()
